@@ -1,4 +1,4 @@
-// Fichier généré : tracés SVG des feuilles tropicales (aplats + nervures).
+// Fichier généré par scripts/generer-feuilles.mjs : tracés SVG des feuilles tropicales (aplats + nervures).
 
 export type FormeFeuille = 'monstera' | 'palme' | 'fougere' | 'bananier' | 'lanceolee'
 
