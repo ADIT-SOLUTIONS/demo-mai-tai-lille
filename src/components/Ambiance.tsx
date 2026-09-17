@@ -37,7 +37,7 @@ export default function Ambiance() {
         </div>
 
         <div className="ambiance__photos">
-          <figure className="ambiance__photo ambiance__photo--1" data-reveal>
+          <figure className="ambiance__photo ambiance__photo--1" data-reveal data-inclinaison>
             <picture>
               <source media="(max-width: 640px)" srcSet="/images/comptoir-bouddha-640.webp" />
               <img
@@ -49,7 +49,7 @@ export default function Ambiance() {
               />
             </picture>
           </figure>
-          <figure className="ambiance__photo ambiance__photo--2" data-reveal>
+          <figure className="ambiance__photo ambiance__photo--2" data-reveal data-inclinaison>
             <picture>
               <source media="(max-width: 640px)" srcSet="/images/ambiance-soiree-640.webp" />
               <img

@@ -21,9 +21,12 @@ function rayon(i: number) {
 
 const RAYONS = Array.from({ length: NB_RAYONS }, (_, i) => rayon(i))
 
-type Props = { className?: string; visage?: boolean }
+type Props = { className?: string; visage?: boolean; trace?: boolean }
 
-export default function Soleil({ className, visage = true }: Props) {
+/** `trace` normalise la longueur de chaque tracé (pathLength = 1) pour animer le dessin des tubes. */
+export default function Soleil({ className, visage = true, trace = false }: Props) {
+  const tube = trace ? { pathLength: 1, className: 'tube' } : {}
+
   return (
     <svg
       className={className}
@@ -37,15 +40,15 @@ export default function Soleil({ className, visage = true }: Props) {
       focusable="false"
     >
       {RAYONS.map((d) => (
-        <path key={d} d={d} />
+        <path key={d} d={d} {...tube} />
       ))}
-      <circle cx="50" cy="50" r="18.5" />
+      <circle cx="50" cy="50" r="18.5" {...tube} />
       {visage && (
         <g strokeWidth="2">
-          <path d="M40.5 46.2 Q44 43.4 47.4 46.2 Q44 48.6 40.5 46.2 Z" />
-          <path d="M52.6 46.2 Q56 43.4 59.5 46.2 Q56 48.6 52.6 46.2 Z" />
-          <path d="M50 46.5 L48.4 53.6 Q50 54.8 51.8 53.6" />
-          <path d="M44.6 58 Q50 61.4 55.4 58" />
+          <path d="M40.5 46.2 Q44 43.4 47.4 46.2 Q44 48.6 40.5 46.2 Z" {...tube} />
+          <path d="M52.6 46.2 Q56 43.4 59.5 46.2 Q56 48.6 52.6 46.2 Z" {...tube} />
+          <path d="M50 46.5 L48.4 53.6 Q50 54.8 51.8 53.6" {...tube} />
+          <path d="M44.6 58 Q50 61.4 55.4 58" {...tube} />
         </g>
       )}
     </svg>

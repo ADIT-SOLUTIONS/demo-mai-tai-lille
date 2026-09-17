@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Logo from './Logo'
+import { getLenis } from '../lib/defilement'
 
 const LIENS = [
   { href: '#le-bar', label: 'Le bar' },
@@ -21,6 +22,8 @@ export default function Header() {
 
   useEffect(() => {
     document.body.classList.toggle('menu-ouvert', ouvert)
+    if (ouvert) getLenis()?.stop()
+    else getLenis()?.start()
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOuvert(false)
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)

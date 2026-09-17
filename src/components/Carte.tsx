@@ -30,7 +30,7 @@ export default function Carte() {
           </p>
         </header>
 
-        <article className="signature" data-reveal>
+        <article className="signature" data-reveal data-inclinaison>
           <Soleil className="signature__soleil" visage={false} />
           <div className="signature__entete">
             <p className="signature__label">Cocktail signature</p>
