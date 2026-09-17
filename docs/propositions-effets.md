@@ -3,7 +3,8 @@
 Pistes proposées le 17/09/2026 pour la refonte du site Maï-Taï.
 
 - **Proposition 1** « Allumage du néon » : réalisée sur la branche `refonte-effets-3d`.
-- **Proposition 2** « Le Maï Taï se compose » : réalisée sur la branche `maitai-se-compose` (créée à partir de `main`).
+- **Proposition 2** « Le Maï Taï se compose » : réalisée sur la branche `maitai-se-compose` (créée à partir de `main`), en SVG.
+  - **Version 3D réaliste** : branche `maitai-3d` (créée à partir de `maitai-se-compose`), en Three.js temps réel, avec glaçons.
 - **Proposition 3** « Profondeur jungle » : réalisée sur la branche `profondeur-jungle` (créée à partir de `main`).
 - **À explorer plus tard** : la proposition 4, décrite ci-dessous.
 
@@ -69,6 +70,16 @@ La section d'accueil reste épinglée pendant le scroll.
 - Version statique : verre plein, liste complète des ingrédients sous forme de pastilles (comme la version actuelle).
 - Poids ajouté : environ 45 Ko compressés (GSAP + ScrollTrigger), déjà présents si la piste 1 est en place.
 - Effort : moyen.
+
+### Version 3D réaliste (branche `maitai-3d`)
+
+- **Rendu** : scène Three.js temps réel, chargée à la demande (environ 150 Ko compressés) quand la section approche.
+- **Verre** : tumbler en révolution avec matériau physique (transmission, réfraction, vernis), condensation en carte de normales, bord arrondi et fond épais.
+- **Liquide** : shader maison, couches aux transitions organiques, absorption selon l'épaisseur traversée, ménisque, ondes au point d'impact, bulles, glaçons et paille visibles à travers le liquide.
+- **Séquence** : filet versé de la couleur de chaque ingrédient, grenadine qui plonge en filaments et se dépose, tourbillon qui fond les couches en dégradé.
+- **Mise en scène** : glaçons (à valider avec les gérants), paille en bambou, quartier d'ananas posé sur le bord, comptoir en bois clair, reflets d'un environnement de bar (softbox chaude, néon vert).
+- **Synchronisation** : état de la scène calculé par une fonction pure du temps de la timeline (`src/components/cocktail/sequence.ts`), partagée avec le texte et les étiquettes, qui suivent la position réelle des couches à l'écran.
+- **Repli** : image fixe `public/images/maitai-3d.webp` générée depuis la scène, affichée si les animations sont réduites, si l'écran est trop bas ou sans WebGL.
 
 ### Points d'attention
 

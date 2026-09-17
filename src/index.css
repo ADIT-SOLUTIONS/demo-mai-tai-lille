@@ -1551,9 +1551,9 @@ ul {
 
 /* Composition du Maï Taï --------------------------------------------------- */
 /*
-  Règles de base = version statique (animations réduites ou écran très bas) : verre rempli,
-  garniture posée, nom allumé, ingrédients en pastilles.
-  .composition--anime (ajoutée en JS) = séquence épinglée où le verre se remplit au scroll.
+  Règles de base = version statique (animations réduites, écran très bas ou sans WebGL) :
+  image du cocktail terminé, nom allumé, ingrédients en pastilles.
+  .composition--anime (ajoutée en JS) = séquence épinglée avec la scène 3D Three.js.
 */
 
 .composition {
@@ -1641,11 +1641,12 @@ ul {
 
 .composition__indice,
 .composition__etiquettes,
-.composition__fin-mobile {
+.composition__fin-mobile,
+.composition__canvas {
   display: none;
 }
 
-/* Plateau et verre */
+/* Plateau : image statique par défaut */
 
 .composition__plateau {
   position: relative;
@@ -1653,121 +1654,16 @@ ul {
   place-items: center;
 }
 
-.composition__lueur {
-  position: absolute;
-  width: min(100%, 620px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(242, 154, 46, 0.2), rgba(242, 154, 46, 0.06) 55%, transparent);
-  pointer-events: none;
-}
-
-.composition__verre {
-  --hv: min(62vh, 540px);
+.composition__stage {
   position: relative;
-  height: var(--hv);
-  aspect-ratio: 300 / 540;
-  perspective: 1100px;
+  width: min(100%, 480px);
 }
 
-.composition__rotation {
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-}
-
-.cm-svg {
+/* Le fondu vers la couleur de fond est intégré à l'image */
+.composition__poster {
   display: block;
   width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.composition__ombre {
-  position: absolute;
-  right: 10%;
-  bottom: -1%;
-  left: 10%;
-  z-index: -1;
-  height: 6%;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.65), transparent);
-}
-
-.cm-fond-verre {
-  fill: rgba(230, 255, 240, 0.025);
-}
-
-.cm-couche {
-  opacity: 0;
-}
-
-.cm-soleil-levant,
-.cm-flux,
-.cm-bulles {
-  opacity: 0;
-}
-
-.cm-bulle {
-  fill: rgba(255, 255, 255, 0.4);
-}
-
-.cm-surface {
-  fill: rgba(255, 245, 220, 0.16);
-  stroke: rgba(255, 245, 230, 0.35);
-  stroke-width: 1;
-}
-
-.cm-paille line {
-  stroke: #cfa36a;
-  stroke-width: 7;
-  stroke-linecap: round;
-}
-
-.cm-paille .cm-paille__noeud {
-  stroke: #8d6a3c;
-  stroke-width: 2.5;
-}
-
-.cm-base {
-  fill: rgba(230, 255, 240, 0.08);
-  stroke: rgba(230, 255, 240, 0.14);
-  stroke-width: 1;
-}
-
-.cm-corps {
-  fill: url(#cm-verre);
-  stroke: rgba(230, 255, 240, 0.4);
-  stroke-width: 1.4;
-}
-
-.cm-paroi {
-  fill: none;
-  stroke: rgba(230, 255, 240, 0.12);
-  stroke-width: 1;
-}
-
-.cm-bord {
-  fill: none;
-  stroke: rgba(240, 255, 245, 0.5);
-  stroke-width: 1.4;
-}
-
-.cm-ananas__chair {
-  fill: #f5cf4c;
-}
-
-.cm-ananas__ecorce {
-  fill: none;
-  stroke: #7a6a22;
-  stroke-width: 7;
-  stroke-linecap: round;
-}
-
-.cm-ananas__fibres {
-  fill: none;
-  stroke: rgba(255, 250, 220, 0.6);
-  stroke-width: 1.2;
+  height: auto;
 }
 
 @media (max-width: 1023px) {
@@ -1786,7 +1682,7 @@ ul {
   }
 }
 
-/* Séquence épinglée */
+/* Séquence épinglée avec scène 3D */
 
 .composition--anime .composition__scene {
   display: flex;
@@ -1796,12 +1692,46 @@ ul {
 }
 
 .composition--anime .composition__grille {
-  padding-block: calc(var(--header-h) + 12px) 24px;
+  width: min(100% - 2 * var(--gutter), 1320px);
+  padding-block: calc(var(--header-h) + 8px) 16px;
 }
 
-.composition--anime .composition__verre {
-  --hv: min(calc(100svh - var(--header-h) - 130px), 600px);
-  margin-right: clamp(150px, 15vw, 210px);
+.composition--anime .composition__plateau {
+  align-self: stretch;
+}
+
+.composition--anime .composition__stage {
+  width: 100%;
+  height: calc(100svh - var(--header-h) - 32px);
+}
+
+.composition--anime .composition__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+  -webkit-mask-image: radial-gradient(ellipse 58% 62% at 50% 52%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 58% 62% at 50% 52%, #000 55%, transparent 100%);
+}
+
+.composition--prete .composition__canvas {
+  opacity: 1;
+}
+
+.composition--anime .composition__poster {
+  display: none;
+}
+
+.composition--sans-3d .composition__poster {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .composition--anime .cm-lettre {
@@ -1866,38 +1796,7 @@ ul {
   }
 }
 
-.composition--anime .cm-couche {
-  opacity: 1;
-}
-
-.composition--anime .cm-melange,
-.composition--anime .cm-surface {
-  opacity: 0;
-}
-
-.composition--anime .cm-ananas,
-.composition--anime .cm-paille {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.composition--anime .cm-bulle {
-  animation: cm-bulle linear infinite;
-}
-
-@keyframes cm-bulle {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  15% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-320px);
-  }
-}
+/* Étiquettes : position calculée à partir de la scène 3D */
 
 .composition--anime .composition__etiquettes {
   position: absolute;
@@ -1911,8 +1810,8 @@ ul {
 
 .etiquette {
   position: absolute;
-  top: calc(var(--y) * 1%);
-  left: calc(var(--x) * 1%);
+  top: 0;
+  left: 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1925,9 +1824,9 @@ ul {
 .etiquette__trait {
   position: relative;
   flex: none;
-  width: calc(var(--hv) * 300 / 540 * (116 - var(--x)) / 100);
+  width: var(--trait, 60px);
   height: 1px;
-  background: linear-gradient(90deg, rgba(230, 255, 240, 0.65), rgba(230, 255, 240, 0.25));
+  background: linear-gradient(90deg, rgba(230, 255, 240, 0.7), rgba(230, 255, 240, 0.25));
   transform-origin: left;
 }
 
@@ -1955,25 +1854,34 @@ ul {
   color: var(--text);
   font-size: 15px;
   font-weight: 500;
+  text-shadow: 0 1px 8px rgba(3, 10, 6, 0.9);
 }
 
 @media (max-width: 1023px) {
   .composition--anime .composition__grille {
-    gap: 12px;
-    align-content: center;
+    grid-template-rows: auto 1fr;
+    gap: 4px;
+    height: 100%;
+    align-content: stretch;
   }
 
   .composition--anime .composition__nom {
-    font-size: clamp(60px, 12vw, 104px);
+    font-size: clamp(56px, 11vw, 100px);
   }
 
-  .composition--anime .composition__verre {
-    --hv: min(calc(100svh - var(--header-h) - 330px), 560px);
+  .composition--anime .composition__stage {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .composition--anime .composition__plateau {
+    width: 100%;
+    min-height: 0;
   }
 
   .composition--anime .composition__indice {
     justify-content: center;
-    margin-top: 14px;
+    margin-top: 10px;
   }
 
   .composition--anime .composition__indice::before {
@@ -1986,7 +1894,7 @@ ul {
 
   .composition--anime .composition__fin-mobile {
     position: absolute;
-    top: calc(100% + 12px);
+    bottom: 12px;
     left: 50%;
     display: block;
     width: max-content;
@@ -2000,29 +1908,21 @@ ul {
 }
 
 @media (max-width: 760px) {
-  .composition--anime .composition__grille {
-    gap: 4px;
-  }
-
   .composition--anime .composition__nom {
-    font-size: clamp(54px, 16vw, 80px);
+    font-size: clamp(50px, 15vw, 76px);
   }
 
   .composition--anime .composition__etat {
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
   .composition--anime .composition__prix {
-    font-size: 34px;
-  }
-
-  .composition--anime .composition__verre {
-    --hv: min(calc(100svh - var(--header-h) - 300px), 430px);
-    margin-right: 0;
+    font-size: 32px;
   }
 
   .etiquette {
-    top: calc(100% + 10px);
+    top: auto;
+    bottom: 14px;
     left: 50%;
     translate: -50% 0;
   }
@@ -2031,7 +1931,8 @@ ul {
     display: none;
   }
 
-  .composition--anime .composition__fin-mobile {
-    top: calc(100% + 10px);
+  .composition--anime .composition__canvas {
+    -webkit-mask-image: radial-gradient(ellipse 70% 62% at 50% 50%, #000 60%, transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 62% at 50% 50%, #000 60%, transparent 100%);
   }
 }
