@@ -1,5 +1,5 @@
-import { BOISSONS, COCKTAILS, SIGNATURE, TAPAS, type Plat } from '../data/infos'
-import Soleil from './Soleil'
+import { BOISSONS, COCKTAILS, TAPAS, type Plat } from '../data/infos'
+import Composition from './Composition'
 
 function ListePlats({ plats }: { plats: Plat[] }) {
   return (
@@ -30,26 +30,11 @@ export default function Carte() {
           </p>
         </header>
 
-        <article className="signature" data-reveal>
-          <Soleil className="signature__soleil" visage={false} />
-          <div className="signature__entete">
-            <p className="signature__label">Cocktail signature</p>
-            <h3 className="signature__nom">{SIGNATURE.nom}</h3>
-            <p className="signature__prix">{SIGNATURE.prix}</p>
-          </div>
-          <div className="signature__corps">
-            <p>
-              Celui qui a donné son nom au bar. Steven a appris à le préparer lors d'un voyage en Thaïlande et le sert
-              aujourd'hui rue Royale.
-            </p>
-            <ul className="ingredients" aria-label="Ingrédients">
-              {SIGNATURE.ingredients.map((ingredient) => (
-                <li key={ingredient}>{ingredient}</li>
-              ))}
-            </ul>
-          </div>
-        </article>
+      </div>
 
+      <Composition />
+
+      <div className="container">
         <div className="carte__colonnes">
           <div className="carte__bloc" data-reveal>
             <h3 className="carte__titre">Tapas thaïes</h3>

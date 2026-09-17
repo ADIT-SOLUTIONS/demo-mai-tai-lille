@@ -897,68 +897,6 @@ ul {
   background: currentColor;
 }
 
-.signature {
-  position: relative;
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  align-items: center;
-  gap: clamp(28px, 5vw, 72px);
-  padding: clamp(28px, 5vw, 60px);
-  border: 1px solid rgba(77, 255, 136, 0.32);
-  border-radius: 28px;
-  background:
-    linear-gradient(135deg, rgba(77, 255, 136, 0.09), transparent 55%),
-    var(--surface);
-  overflow: hidden;
-}
-
-.signature__soleil {
-  position: absolute;
-  top: -90px;
-  right: -90px;
-  width: 340px;
-  height: 340px;
-  color: var(--neon);
-  opacity: 0.08;
-  pointer-events: none;
-}
-
-.signature__entete,
-.signature__corps {
-  position: relative;
-}
-
-.signature__label {
-  color: var(--wood);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
-.signature__nom {
-  margin-top: 6px;
-  color: var(--neon);
-  font-family: var(--font-display);
-  font-size: clamp(72px, 10vw, 128px);
-  font-weight: 550;
-  line-height: 0.9;
-  text-transform: uppercase;
-  text-shadow: 0 0 36px rgba(77, 255, 136, 0.4);
-}
-
-.signature__prix {
-  margin-top: 10px;
-  font-family: var(--font-display);
-  font-size: 34px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.signature__corps > p {
-  color: var(--text-soft);
-}
-
 .ingredients {
   display: flex;
   flex-wrap: wrap;
@@ -1062,12 +1000,6 @@ ul {
   }
 }
 
-@media (max-width: 800px) {
-  .signature {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 640px) {
   .carte__colonnes {
     grid-template-columns: 1fr;
@@ -1075,13 +1007,6 @@ ul {
 
   .carte__bloc:last-child .plats {
     grid-template-columns: 1fr;
-  }
-
-  .signature__soleil {
-    top: -70px;
-    right: -90px;
-    width: 260px;
-    height: 260px;
   }
 }
 
@@ -1621,5 +1546,492 @@ ul {
   [data-reveal].is-visible {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Composition du Maï Taï --------------------------------------------------- */
+/*
+  Règles de base = version statique (animations réduites ou écran très bas) : verre rempli,
+  garniture posée, nom allumé, ingrédients en pastilles.
+  .composition--anime (ajoutée en JS) = séquence épinglée où le verre se remplit au scroll.
+*/
+
+.composition {
+  position: relative;
+}
+
+.composition__scene {
+  position: relative;
+}
+
+.composition__grille {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  padding-block: clamp(8px, 3vw, 40px) clamp(24px, 4vw, 56px);
+}
+
+.composition__texte {
+  position: relative;
+  z-index: 2;
+}
+
+.composition__nom {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: clamp(72px, 10vw, 136px);
+  font-weight: 550;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.cm-lettre {
+  --a: 1;
+  color: rgb(77 255 136 / var(--a));
+  -webkit-text-stroke: 1px rgb(214 255 226 / calc(0.3 * (1 - var(--a))));
+  text-shadow:
+    0 0 calc(var(--a) * 16px) rgb(77 255 136 / calc(var(--a) * 0.45)),
+    0 0 calc(var(--a) * 50px) rgb(77 255 136 / calc(var(--a) * 0.25));
+}
+
+.composition__etat {
+  display: grid;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.composition__etat > * {
+  grid-area: 1 / 1;
+}
+
+.composition__compteur {
+  display: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.composition__compteur-valeur {
+  margin-right: 4px;
+  color: var(--neon);
+  font-family: var(--font-display);
+  font-size: 30px;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.composition__prix {
+  color: var(--wood);
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.composition__phrase {
+  max-width: 42ch;
+  margin-top: 18px;
+  color: var(--text-soft);
+  text-wrap: pretty;
+}
+
+.composition__indice,
+.composition__etiquettes,
+.composition__fin-mobile {
+  display: none;
+}
+
+/* Plateau et verre */
+
+.composition__plateau {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.composition__lueur {
+  position: absolute;
+  width: min(100%, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(242, 154, 46, 0.2), rgba(242, 154, 46, 0.06) 55%, transparent);
+  pointer-events: none;
+}
+
+.composition__verre {
+  --hv: min(62vh, 540px);
+  position: relative;
+  height: var(--hv);
+  aspect-ratio: 300 / 540;
+  perspective: 1100px;
+}
+
+.composition__rotation {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.cm-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.composition__ombre {
+  position: absolute;
+  right: 10%;
+  bottom: -1%;
+  left: 10%;
+  z-index: -1;
+  height: 6%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.65), transparent);
+}
+
+.cm-fond-verre {
+  fill: rgba(230, 255, 240, 0.025);
+}
+
+.cm-couche {
+  opacity: 0;
+}
+
+.cm-soleil-levant,
+.cm-flux,
+.cm-bulles {
+  opacity: 0;
+}
+
+.cm-bulle {
+  fill: rgba(255, 255, 255, 0.4);
+}
+
+.cm-surface {
+  fill: rgba(255, 245, 220, 0.16);
+  stroke: rgba(255, 245, 230, 0.35);
+  stroke-width: 1;
+}
+
+.cm-paille line {
+  stroke: #cfa36a;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.cm-paille .cm-paille__noeud {
+  stroke: #8d6a3c;
+  stroke-width: 2.5;
+}
+
+.cm-base {
+  fill: rgba(230, 255, 240, 0.08);
+  stroke: rgba(230, 255, 240, 0.14);
+  stroke-width: 1;
+}
+
+.cm-corps {
+  fill: url(#cm-verre);
+  stroke: rgba(230, 255, 240, 0.4);
+  stroke-width: 1.4;
+}
+
+.cm-paroi {
+  fill: none;
+  stroke: rgba(230, 255, 240, 0.12);
+  stroke-width: 1;
+}
+
+.cm-bord {
+  fill: none;
+  stroke: rgba(240, 255, 245, 0.5);
+  stroke-width: 1.4;
+}
+
+.cm-ananas__chair {
+  fill: #f5cf4c;
+}
+
+.cm-ananas__ecorce {
+  fill: none;
+  stroke: #7a6a22;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.cm-ananas__fibres {
+  fill: none;
+  stroke: rgba(255, 250, 220, 0.6);
+  stroke-width: 1.2;
+}
+
+@media (max-width: 1023px) {
+  .composition__grille {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .composition__phrase {
+    margin-inline: auto;
+  }
+
+  .composition__liste {
+    justify-content: center;
+  }
+}
+
+/* Séquence épinglée */
+
+.composition--anime .composition__scene {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  height: 100svh;
+}
+
+.composition--anime .composition__grille {
+  padding-block: calc(var(--header-h) + 12px) 24px;
+}
+
+.composition--anime .composition__verre {
+  --hv: min(calc(100svh - var(--header-h) - 130px), 600px);
+  margin-right: clamp(150px, 15vw, 210px);
+}
+
+.composition--anime .cm-lettre {
+  --a: 0;
+}
+
+.composition--anime .composition__compteur {
+  display: block;
+}
+
+.composition--anime .composition__prix,
+.composition--anime .composition__phrase,
+.composition--anime .composition__fin-mobile {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.composition--anime .composition__liste {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.composition--anime .composition__indice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 26px;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.composition--anime .composition__indice::before {
+  content: '';
+  flex: none;
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(var(--neon), transparent);
+  transform-origin: top;
+  animation: cm-indice 2s var(--ease) infinite;
+}
+
+@keyframes cm-indice {
+  0% {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+.composition--anime .cm-couche {
+  opacity: 1;
+}
+
+.composition--anime .cm-melange,
+.composition--anime .cm-surface {
+  opacity: 0;
+}
+
+.composition--anime .cm-ananas,
+.composition--anime .cm-paille {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.composition--anime .cm-bulle {
+  animation: cm-bulle linear infinite;
+}
+
+@keyframes cm-bulle {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-320px);
+  }
+}
+
+.composition--anime .composition__etiquettes {
+  position: absolute;
+  inset: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.etiquette {
+  position: absolute;
+  top: calc(var(--y) * 1%);
+  left: calc(var(--x) * 1%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -50%;
+}
+
+.etiquette__trait {
+  position: relative;
+  flex: none;
+  width: calc(var(--hv) * 300 / 540 * (116 - var(--x)) / 100);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(230, 255, 240, 0.65), rgba(230, 255, 240, 0.25));
+  transform-origin: left;
+}
+
+.etiquette__trait::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--couleur);
+  box-shadow: 0 0 0 2px rgba(3, 10, 6, 0.85);
+}
+
+.etiquette__numero {
+  color: var(--neon);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.etiquette__nom {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+@media (max-width: 1023px) {
+  .composition--anime .composition__grille {
+    gap: 12px;
+    align-content: center;
+  }
+
+  .composition--anime .composition__nom {
+    font-size: clamp(60px, 12vw, 104px);
+  }
+
+  .composition--anime .composition__verre {
+    --hv: min(calc(100svh - var(--header-h) - 330px), 560px);
+  }
+
+  .composition--anime .composition__indice {
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .composition--anime .composition__indice::before {
+    display: none;
+  }
+
+  .composition--anime .composition__phrase {
+    display: none;
+  }
+
+  .composition--anime .composition__fin-mobile {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    display: block;
+    width: max-content;
+    max-width: 80vw;
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.4;
+    text-align: center;
+    translate: -50% 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .composition--anime .composition__grille {
+    gap: 4px;
+  }
+
+  .composition--anime .composition__nom {
+    font-size: clamp(54px, 16vw, 80px);
+  }
+
+  .composition--anime .composition__etat {
+    margin-top: 8px;
+  }
+
+  .composition--anime .composition__prix {
+    font-size: 34px;
+  }
+
+  .composition--anime .composition__verre {
+    --hv: min(calc(100svh - var(--header-h) - 300px), 430px);
+    margin-right: 0;
+  }
+
+  .etiquette {
+    top: calc(100% + 10px);
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  .etiquette__trait {
+    display: none;
+  }
+
+  .composition--anime .composition__fin-mobile {
+    top: calc(100% + 10px);
   }
 }
