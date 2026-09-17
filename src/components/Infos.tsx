@@ -1,16 +1,23 @@
 import { ADRESSE, CONTACT, HORAIRES, LIENS_CARTE } from '../data/infos'
 import { useStatut } from '../hooks/useStatut'
 import { formatHeure } from '../utils/horaires'
+import Plans from './Plans'
+import Titre from './Titre'
 
 export default function Infos() {
   const statut = useStatut()
 
   return (
     <section id="infos" className="section infos">
+      <Plans
+        elements={[
+          { classe: 'plan--infos-soleil', couche: 'arriere', vitesse: -0.3, balancement: -8, contenu: 'soleil' },
+        ]}
+      />
       <div className="container">
         <header className="section__entete" data-reveal>
           <p className="surtitre">Infos pratiques</p>
-          <h2 className="titre">Horaires & accès</h2>
+          <Titre>Horaires & accès</Titre>
         </header>
 
         <div className="infos__grille">

@@ -1,4 +1,6 @@
 import { RESEAUX } from '../data/infos'
+import Plans from './Plans'
+import Titre from './Titre'
 
 const DETAILS = [
   { titre: 'Mur végétal et bouddhas', texte: 'Derrière le comptoir, les bouteilles se rangent au milieu des plantes.' },
@@ -10,10 +12,17 @@ const DETAILS = [
 export default function Ambiance() {
   return (
     <section id="ambiance" className="section ambiance">
+      <Plans
+        elements={[
+          { classe: 'plan--ambiance-halo', couche: 'arriere', vitesse: -0.4, contenu: 'halo' },
+          { classe: 'plan--ambiance-monstera', couche: 'avant', vitesse: 0.5, balancement: 7, contenu: 'monstera' },
+          { classe: 'plan--ambiance-bananier', couche: 'avant', vitesse: 0.75, balancement: -6, contenu: 'bananier' },
+        ]}
+      />
       <div className="container ambiance__grille">
         <div className="ambiance__texte" data-reveal>
           <p className="surtitre">L'ambiance</p>
-          <h2 className="titre">Un bar de plage en plein Vieux-Lille</h2>
+          <Titre>Un bar de plage en plein Vieux-Lille</Titre>
           <p className="section__intro">
             Néons verts, mur végétal et objets rapportés de Thaïlande. Toute la décoration a été refaite pour vous faire
             voyager le temps d'un verre.
@@ -37,7 +46,7 @@ export default function Ambiance() {
         </div>
 
         <div className="ambiance__photos">
-          <figure className="ambiance__photo ambiance__photo--1" data-reveal>
+          <figure className="ambiance__photo ambiance__photo--1" data-reveal data-inclinaison>
             <picture>
               <source media="(max-width: 640px)" srcSet="/images/comptoir-bouddha-640.webp" />
               <img
@@ -49,7 +58,7 @@ export default function Ambiance() {
               />
             </picture>
           </figure>
-          <figure className="ambiance__photo ambiance__photo--2" data-reveal>
+          <figure className="ambiance__photo ambiance__photo--2" data-reveal data-inclinaison>
             <picture>
               <source media="(max-width: 640px)" srcSet="/images/ambiance-soiree-640.webp" />
               <img

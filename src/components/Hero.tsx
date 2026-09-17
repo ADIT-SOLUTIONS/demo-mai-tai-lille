@@ -1,11 +1,22 @@
 import { useStatut } from '../hooks/useStatut'
 import { ADRESSE } from '../data/infos'
+import Plans from './Plans'
 
 export default function Hero() {
   const statut = useStatut()
 
   return (
     <section id="accueil" className="hero">
+      <Plans
+        hero
+        elements={[
+          { classe: 'plan--hero-soleil', couche: 'arriere', vitesse: -0.45, balancement: 12, contenu: 'soleil' },
+          { classe: 'plan--hero-halo', couche: 'arriere', vitesse: -0.4, contenu: 'halo' },
+          { classe: 'plan--hero-monstera', couche: 'avant', vitesse: 0.55, balancement: 8, contenu: 'monstera' },
+          { classe: 'plan--hero-palme', couche: 'avant', vitesse: 0.35, balancement: -6, contenu: 'palme' },
+          { classe: 'plan--hero-fougere', couche: 'avant', vitesse: 0.7, balancement: 5, contenu: 'fougere' },
+        ]}
+      />
       <div className="container hero__grille">
         <div className="hero__texte">
           <p className="hero__salut" lang="th">
@@ -31,7 +42,7 @@ export default function Hero() {
           </a>
         </div>
 
-        <figure className="hero__visuel">
+        <figure className="hero__visuel" data-inclinaison="souris">
           <picture>
             <source media="(max-width: 640px)" srcSet="/images/enseigne-neon-mobile.webp" />
             <source media="(max-width: 960px)" srcSet="/images/enseigne-neon-640.webp" />

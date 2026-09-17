@@ -1,10 +1,19 @@
+import Plans from './Plans'
+import Titre from './Titre'
+
 export default function Histoire() {
   return (
     <section id="le-bar" className="section histoire">
+      <Plans
+        elements={[
+          { classe: 'plan--histoire-lanceolee', couche: 'avant', vitesse: 0.8, balancement: 10, contenu: 'lanceolee' },
+          { classe: 'plan--histoire-fougere', couche: 'avant', vitesse: 0.6, balancement: -8, contenu: 'fougere' },
+        ]}
+      />
       <div className="container histoire__grille">
         <div className="histoire__texte" data-reveal>
           <p className="surtitre">Le bar</p>
-          <h2 className="titre">Deux amis, un bout de Thaïlande rue Royale</h2>
+          <Titre>Deux amis, un bout de Thaïlande rue Royale</Titre>
           <p>
             Reda et Steven sont amis depuis six ans et partagent le même attachement à la Thaïlande. Ils y sont
             retournés à de nombreuses reprises, en vacances puis pour chercher l'inspiration, avant de passer deux ans à
@@ -23,7 +32,7 @@ export default function Histoire() {
         </div>
 
         <figure className="histoire__photo" data-reveal>
-          <picture>
+          <picture data-inclinaison>
             <source media="(max-width: 640px)" srcSet="/images/mur-vegetal-bar-640.webp" />
             <img
               src="/images/mur-vegetal-bar.webp"

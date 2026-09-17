@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { CONTACT, RESEAUX } from '../data/infos'
+import Plans from './Plans'
+import Titre from './Titre'
 
 /**
  * Pas de backend par défaut : la demande est envoyée via WhatsApp avec un message prérempli.
@@ -70,10 +72,17 @@ export default function Reserver() {
 
   return (
     <section id="reserver" className="section reserver">
+      <Plans
+        elements={[
+          { classe: 'plan--reserver-halo', couche: 'arriere', vitesse: -0.4, contenu: 'halo' },
+          { classe: 'plan--reserver-palme', couche: 'avant', vitesse: 0.6, balancement: 8, contenu: 'palme' },
+          { classe: 'plan--reserver-lanceolee', couche: 'avant', vitesse: 0.9, balancement: -10, contenu: 'lanceolee' },
+        ]}
+      />
       <div className="container reserver__grille">
         <div className="reserver__texte" data-reveal>
           <p className="surtitre">Réserver</p>
-          <h2 className="titre">Gardez-nous une table</h2>
+          <Titre>Gardez-nous une table</Titre>
           <p className="section__intro">
             Un afterwork, un anniversaire ou simplement une soirée entre amis : envoyez votre demande, on revient vers
             vous pour la confirmer.
